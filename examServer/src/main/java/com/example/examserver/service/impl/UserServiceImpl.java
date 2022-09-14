@@ -19,7 +19,12 @@ public class UserServiceImpl implements UserService {
     private RoleRepo roleRepo;
 
     @Override
-    public User createUser(User user, Set<UserRole> userRoles) {
+    public void deleteUser(String username) {
+        userRepo.delete(userRepo.findByUsername(username));
+    }
+
+    @Override
+    public User createUser(User user, Set<UserRole> userRoles) throws Exception {
         System.out.println("creating new user " + user.getUsername());
         User localUser = userRepo.findByUsername(user.getUsername());
         if(localUser == null) {
@@ -30,7 +35,12 @@ public class UserServiceImpl implements UserService {
             return userRepo.save(user);
         }
         else {
-            throw new RuntimeException("User with username already exists!");
+            throw new Exception("User with username already exists!");
         }
+    }
+
+    @Override
+    public User getUser(String username) {
+        return userRepo.findByUsername(username);
     }
 }
