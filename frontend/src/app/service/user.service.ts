@@ -15,4 +15,10 @@ export class UserService {
     console.log(url);
     return this.http.post(url, user);
   }
+
+  public loginUser(user:any) {
+    var url = glob.baseUrl + '/generate-token';
+    this.http.post(url, user);
+
+  }
 }

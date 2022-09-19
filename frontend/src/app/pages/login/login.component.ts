@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar'
+import { LoginService } from 'src/app/service/login.service';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-login',
@@ -7,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  constructor(private snack: MatSnackBar, private loginService: LoginService) { }
 
   public user = {
     username: '',
@@ -18,15 +21,26 @@ export class LoginComponent implements OnInit {
   }
 
   formSubmit() {
-    // this.userservice.addUser(this.user).subscribe(
-    //   (data)=> {
-    //     console.log(data);
-    //     this.snack.open("success", "", {duration:3000, });
-    //   },
-    //   (error)=> {
-    //     console.log(error);
-    //     Swal.fire("error");
-    //   }
-    // )
+    console.log("login form submit");
+    
+    if(this.user.username.trim() == "" || this.user.username == null) {
+      this.snack.open("username cant be empty", '', {duration:3000});
+    }
+    if(this.user.password.trim() == "" || this.user.password == null) {
+      this.snack.open("password cant be empty", '', {duration:3000});
+    }
+    console.log(this.user.username + " " + this.user.password);
+    this.loginService.generateToken(this.user).subscribe(
+      (data:any) =>{
+        console.log("login successful");
+        console.log(data);
+        this.loginService.loginUser(data);
+
+      },
+      (error:any) =>{
+        console.log("login not successful");
+        console.log(error);
+      }
+    );
   }
 }
