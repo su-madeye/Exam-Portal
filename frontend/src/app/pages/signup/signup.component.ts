@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from 'src/app/service/user.service';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-signup',
@@ -8,7 +10,7 @@ import { UserService } from 'src/app/service/user.service';
 })
 export class SignupComponent implements OnInit {
 
-  constructor(private userservice: UserService) { }
+  constructor(private userservice: UserService, private snack: MatSnackBar) { }
 
   public user = {
     username: '',
@@ -26,11 +28,11 @@ export class SignupComponent implements OnInit {
     this.userservice.addUser(this.user).subscribe(
       (data)=> {
         console.log(data);
-        alert("success");
+        this.snack.open("success", "", {duration:3000, });
       },
       (error)=> {
         console.log(error);
-        alert("error");
+        Swal.fire("error");
       }
     )
   }

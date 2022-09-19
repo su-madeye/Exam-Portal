@@ -2,6 +2,7 @@ package com.example.examserver.service;
 
 import com.example.examserver.models.User;
 import com.example.examserver.models.UserRole;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;

@@ -6,12 +6,15 @@ import com.example.examserver.repo.RoleRepo;
 import com.example.examserver.repo.UserRepo;
 import com.example.examserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepo userRepo;
@@ -42,5 +45,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUser(String username) {
         return userRepo.findByUsername(username);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepo.findByUsername(username);
+        if(user == null) {
+            System.out.println("User not found");
+            throw new UsernameNotFoundException("user with username " + username + " not found");
+        }
+        return user;
     }
 }
