@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar'
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { LoginService } from 'src/app/service/login.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -10,12 +12,13 @@ import { UserService } from 'src/app/service/user.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private snack: MatSnackBar, private loginService: LoginService) { }
+  constructor(private snack: MatSnackBar, private loginService: LoginService, private router: Router) { }
 
   public user = {
     username: '',
     password: '',
   };
+
 
   ngOnInit(): void {
   }
@@ -35,11 +38,31 @@ export class LoginComponent implements OnInit {
         console.log("login successful");
         console.log(data);
         this.loginService.loginUser(data);
+        this.loginService.getCurrentUser().subscribe(
+          (user:any) => {
+            console.log(user);
+            this.loginService.setUser(user);
 
+            if(this.loginService.getRole() == "ADMIN") {
+              // window.location.href = "/adminDashboard";
+              this.router.navigate(['adminDashboard']);
+              this.loginService.loginStatusSubject.next(true);
+            }
+            else if(this.loginService.getRole() == "USER") {
+              // window.location.href = "/dashboard";
+              this.router.navigate(['dashboard']);
+              this.loginService.loginStatusSubject.next(true);
+            } else {
+              this.loginService.logout();
+              // location.reload();
+            }
+          }
+        );
       },
       (error:any) =>{
         console.log("login not successful");
         console.log(error);
+        this.snack.open("Invalid credentials", '', {duration:3000});
       }
     );
   }

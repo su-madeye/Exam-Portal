@@ -62,6 +62,7 @@ public class AuthenticationController {
     }
      @GetMapping("/current-user")
     public User getUser(Principal principal) {
+        System.out.println(principal.toString());
         return (User) userService.loadUserByUsername(principal.getName());
     }
 }

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { baseUrl } from './helper';
 
 @Injectable({
@@ -7,14 +8,23 @@ import { baseUrl } from './helper';
 })
 export class LoginService {
 
+  public loginStatusSubject = new Subject<boolean>();
+
+
   constructor(private http: HttpClient) { }
+
+  public getCurrentUser() {
+    
+    return this.http.get(`${baseUrl}/current-user`);
+  }
 
   public generateToken(loginData: any) {
     return this.http.post(`${baseUrl}/generate-token`, loginData);
   }
 
   public loginUser(token:any) {
-    localStorage.setItem("token", token);
+    console.log(token['token']);
+    localStorage.setItem("token", token['token']);
     return true;
   }
 
