@@ -5,6 +5,8 @@ import com.example.examserver.models.User;
 import com.example.examserver.models.UserRole;
 import com.example.examserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -17,9 +19,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping("/create")
     public User createUser(@RequestBody User user) throws Exception {
         Set<UserRole> userRoles = new HashSet<>();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         Role role = new Role();
         role.setRoleName("USER");
         role.setRoleId(123L);
