@@ -15,11 +15,12 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("init");
-    
     this.login.loginStatusSubject.asObservable().subscribe(data=>{
       this.isLoggedIn = this.login.isLoggedin();
       this.user = this.login.getUser();
     });
+    this.isLoggedIn = this.login.isLoggedin();
+    this.user = this.login.getUser();
     console.log(this.isLoggedIn);
     console.log(this.user);
   }
