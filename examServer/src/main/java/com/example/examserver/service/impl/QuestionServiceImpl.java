@@ -27,7 +27,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Set<Question> getQuestiones() {
+    public Set<Question> getQuestions() {
         return new LinkedHashSet<>(questionRepo.findAll());
     }
 
@@ -39,5 +39,10 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void deleteQuestion(Long cid) {
         questionRepo.deleteById(cid);
+    }
+
+    @Override
+    public Set<Question> getQuestionsofQuiz(Quiz quiz) {
+        return questionRepo.findByQuiz(quiz);
     }
 }
