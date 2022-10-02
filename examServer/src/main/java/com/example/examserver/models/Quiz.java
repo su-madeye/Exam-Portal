@@ -47,6 +47,14 @@ public class Quiz {
         this.id = id;
     }
 
+    public Set<Question> getQuestionSet() {
+        return questionSet;
+    }
+
+    public void setQuestionSet(Set<Question> questionSet) {
+        this.questionSet = questionSet;
+    }
+
     public String getTitle() {
         return title;
     }

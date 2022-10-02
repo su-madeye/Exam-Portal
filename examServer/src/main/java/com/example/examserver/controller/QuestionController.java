@@ -8,8 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/question")
@@ -49,9 +48,13 @@ public class QuestionController {
     @GetMapping("/quiz/{quizId}")
     public ResponseEntity<?> questionsOfQuiz(@PathVariable Long quizId) {
         Quiz quiz = quizService.getQuiz(quizId);
-        Set<Question> questions = new HashSet<>();
-        questions = service.getQuestionsofQuiz(quiz);
-        return ResponseEntity.ok(questions);
+        Set<Question> questions = quiz.getQuestionSet();
+        List list  = new ArrayList(questions);
+        Collections.shuffle(list);
+        if(list.size() > Integer.parseInt(quiz.getNumberOfQuestion())) {
+            list = list.subList(0, Integer.parseInt(quiz.getNumberOfQuestion()) + 1);
+        }
+        return ResponseEntity.ok(list);
     }
 
 }
